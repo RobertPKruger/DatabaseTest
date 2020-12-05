@@ -1,0 +1,56 @@
+﻿@{
+	ViewBag.Title = "Home Page";
+}
+
+
+<div class="jumbotron">
+	<h1>Sales Database</h1>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<h2>Products:</h2>
+
+		@foreach (var product in Model)
+		{
+			<p style="font-size:medium !important; color:green;">
+				@product.Name
+			</p>
+		}
+
+		<h2>Enter a Name or Part of a Name:</h2>
+
+		<input type="text" id="qry" name="qry" /><br />
+		<input type="button" id="submitButton" value="submit" />
+
+		<div id="results"></div>
+
+	</div>
+
+	@section Scripts {
+		<script type="text/javascript">
+
+			$("#submitButton").click(function (e) {
+
+				var qry = $("#qry").val();
+
+				$.ajax({
+					type: "POST",
+					url: "/Home/Query",
+					data: { qry: qry },
+
+					success: function (data) {
+						var str = "";
+						for (var i = 0; i < data.length; i++) {
+							str = str + data[i].Name + "<br />";
+						}
+
+						$("#results").html(str);
+						//$("#results").html(JSON.stringify(data));
+					}
+				});
+			});
+		</script>
+		}
+
+	</div>
